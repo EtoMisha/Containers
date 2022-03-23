@@ -6,9 +6,9 @@
 namespace ft 
 {
   template <class T, bool isconst = false>
-  struct vector_iterator 
+  struct iterator 
   {
-    typedef vector_iterator<T, isconst>      self;
+    typedef iterator<T, isconst>      type;
 
     typedef std::ptrdiff_t                  difference_type;
     typedef std::bidirectional_iterator_tag iterator_category;
@@ -16,72 +16,121 @@ namespace ft
     typedef typename choose_type<isconst, const T&, T&>::type  reference;
     typedef typename choose_type<isconst, const T*, T*>::type  pointer;
 
-    vector_iterator() : ptr_(NULL) {};
-    vector_iterator(value_type *ptr) : ptr_(ptr) {};
-    vector_iterator(const vector_iterator<T, false> &copy) : ptr_(copy.ptr_) {};
+    iterator() : _ptr(NULL) {};
+    iterator(value_type *ptr) : _ptr(ptr) {};
+    iterator(const iterator<T, false> &copy) : _ptr(copy._ptr) {};
 
-    virtual ~vector_iterator() {};
+    virtual ~iterator() {};
 
-    self   &operator = (const self &rhs) {
-      ptr_ = rhs.ptr_;
+    type   &operator = (const type &rhs)
+    {
+      _ptr = rhs._ptr;
       return *this;
     };
 
-    self     &operator ++ () {
-      ptr_++;
+    type     &operator ++ ()
+    {
+      _ptr++;
       return *this;
     };
-    self     operator ++ (int) {
-      self tmp = *this;
+    
+    type     operator ++ (int) 
+    {
+      type tmp = *this;
       ++(*this);
       return tmp;
     };
-    self     &operator -- () {
-      ptr_--;
+    
+    type     &operator -- () 
+    {
+      _ptr--;
       return *this;
     };
-    self     operator -- (int) {
-      self tmp = *this;
-      --(*this);
-      return tmp;
+    
+    type     operator -- (int) 
+    {
+        type tmp = *this;
+        --(*this);
+        return tmp;
     };
-    self     operator += (int n) {
-      ptr_ += n;
-      return *this;
+    
+    type     operator += (int n) 
+    {
+        _ptr += n;
+        return *this;
     };
-    self     operator -= (int n) {
-      ptr_ -= n;
-      return *this;
+    
+    type     operator -= (int n) 
+    {
+        _ptr -= n;
+        return *this;
     };
-    self     operator + (int n) const {
-      self  tmp(*this);
-      return tmp += n;
+    
+    type     operator + (int n) const 
+    {
+        type  tmp(*this);
+        return tmp += n;
     };
-    self     operator - (int n) const {
-      self  tmp(*this);
-      return tmp -= n;
+    
+    type     operator - (int n) const 
+    {
+        type  tmp(*this);
+        return tmp -= n;
     };
-    difference_type     operator - (vector_iterator<T, true> it) const {
-      return ptr_ - it.ptr_;
+    
+    difference_type     operator - (iterator<T, true> it) const 
+    {
+        return _ptr - it._ptr;
     };
-    reference operator[] (size_t n) const {
-      return ptr_[n];
+    
+    reference operator[] (size_t n) const 
+    {
+        return _ptr[n];
     };
 
-    bool      operator < (const vector_iterator<T, true> &rhs) const   { return ptr_ < rhs.ptr_; };
-    bool      operator > (const vector_iterator<T, true> &rhs) const   { return ptr_ > rhs.ptr_; };
-    bool      operator <= (const vector_iterator<T, true> &rhs) const  { return ptr_ <= rhs.ptr_; };
-    bool      operator >= (const vector_iterator<T, true> &rhs) const  { return ptr_ >= rhs.ptr_; };
+    bool      operator < (const iterator<T, true> &rhs) const   
+    {
+        return _ptr < rhs._ptr;
+    };
+    bool      operator > (const iterator<T, true> &rhs) const
+    {
+        return _ptr > rhs._ptr;
+    };
+    bool      operator <= (const iterator<T, true> &rhs) const
+    {
+        return _ptr <= rhs._ptr;
+    };
+    bool      operator >= (const iterator<T, true> &rhs) const  
+    {
+        return _ptr >= rhs._ptr;
+    };
+    bool      operator == (const iterator<T, true> &rhs) const 
+    {
+        return _ptr == rhs._ptr;
+    };
+    bool      operator != (const iterator<T, true> &rhs) const  
+    {
+        return _ptr != rhs._ptr;
+    };
+    reference operator *  () const                 
+    {
+        return *_ptr;
+    };
+    pointer   operator -> () const                 
+    {
+        return _ptr;
+    };
 
-    bool      operator == (const vector_iterator<T, true> &rhs) const  { return ptr_ == rhs.ptr_; };
-    bool      operator != (const vector_iterator<T, true> &rhs) const  { return ptr_ != rhs.ptr_; };
-    reference operator *  () const                 { return *ptr_; };
-    pointer   operator -> () const                 { return ptr_; };
+    friend self operator + (int n, self it) 
+    {
+        return it += n;
+    };
+    friend self operator - (int n, self it) 
+    {
+        return it -= n;
+    };
 
-    friend self operator + (int n, self it) { return it += n; };
-    friend self operator - (int n, self it) { return it -= n; };
-
-    pointer ptr_;
+    pointer _ptr;
   };
 }
 
