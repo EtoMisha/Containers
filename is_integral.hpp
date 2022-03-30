@@ -74,5 +74,5 @@ namespace ft
 	{
 		static const bool value = true;
 	};
-
+}
 #endif

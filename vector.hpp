@@ -5,9 +5,8 @@
 # include <string>
 # include <cstddef>
 
-# include "vector_iterator.hpp"
+# include "iterator.hpp"
 # include "reverse_iterator.hpp"
-# include "utils_containers.hpp"
 
 namespace ft
 {
@@ -20,8 +19,8 @@ namespace ft
 			typedef const T& 								const_reference;
 			typedef T* 										pointer;
 			typedef const T*								const_pointer;
-			typedef ft::vector_iterator<T>					iterator;
-			typedef ft::vector_iterator<T, true>			const_iterator;
+			typedef ft::iterator<T>							iterator;
+			typedef ft::iterator<T, true>					const_iterator;
 			typedef ft::reverse_iterator<iterator>			reverse_iterator;
 			typedef ft::reverse_iterator<const_iterator>	const_reverse_iterator;
 			typedef std::ptrdiff_t							difference_type;
@@ -61,7 +60,7 @@ namespace ft
 			vector(const vector& x)
 			{
 				this->_container = NULL;
-				this->_alloc = x.alloc;
+				this->_alloc = x._alloc;
 				this->_size = 0;
 				this->_capacity = 0;
 				assign(x.begin(), x.end());
@@ -83,11 +82,11 @@ namespace ft
 
 		/*		Iterators		*/
 
-			iterator begin(void)
+			iterator begin(void) const
 			{
 				return(iterator(this->_container));
 			}
-			iterator end(void)
+			iterator end(void) const
 			{
 				return(iterator(&(this->_container[this->_size])));
 			}
@@ -108,7 +107,7 @@ namespace ft
 			}
 			size_type max_size(void) const 
 			{
-				return (std::numeric_limits<difference_type>::max() / sizeof(value_type));
+				return (std::numeric_limits<difference_type>::max() / sizeof(value_type) * 2);
 			}
 			void resize(size_type n, value_type val = value_type()) 
 			{
@@ -270,7 +269,7 @@ namespace ft
 				return iterator(&this->_container[index]);
 			}
 
-			void insert (iterator position, size_type n, const value_type& val)
+			void insert (iterator position, int n, const value_type& val)
 			{
 				size_type index = position - begin();
 
@@ -407,11 +406,11 @@ namespace ft
 				erase(begin(), end());
 			}
 
-			private:
-				pointer			_container;
-				size_type		_capacity;
-				size_type		_size;
-				allocator_type	_alloc;
+		private:
+			pointer			_container;
+			size_type		_capacity;
+			size_type		_size;
+			allocator_type	_alloc;
 	};
 
 	/*		Non members		*/

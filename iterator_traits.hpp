@@ -34,7 +34,7 @@ namespace ft {
 	};
 
 
-//-------------------------- ???
+//-------------------------- 
 
 	template <bool flag, class const_type, class normal_type>
 	struct choose_type;

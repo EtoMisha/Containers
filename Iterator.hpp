@@ -1,155 +1,137 @@
 #ifndef ITERATOR_HPP
 # define ITERATOR_HPP
 
-namespace ft
+# include "iterator_traits.hpp"
+
+namespace ft 
 {
-    template <typename T>
-    class Iterator
-    {
-        public:
+	template <class T, bool isconst = false>
+	struct iterator 
+	{
+		typedef iterator<T, isconst>								type;
 
-            typedef T                   value_type;
-            typedef value_type *        pointer;
-            typedef value_type const *  const_pointer;
-            typedef value_type &        reference;
-            typedef value_type const &  const_reference;
+		typedef std::ptrdiff_t										difference_type;
+		typedef std::bidirectional_iterator_tag						iterator_category;
+		typedef T													value_type;
+		typedef typename choose_type<isconst, const T&, T&>::type	reference;
+		typedef typename choose_type<isconst, const T*, T*>::type	pointer;
 
-        protected:
+		iterator() : _ptr(NULL) {};
+		iterator(value_type *ptr) : _ptr(ptr) {};
+		iterator(const iterator<T, false> &copy) : _ptr(copy._ptr) {};
 
-            pointer _p;
+		virtual ~iterator() {};
 
-        public:
+		type &operator = (const type &rhs)
+		{
+			_ptr = rhs._ptr;
+			return *this;
+		};
 
-            Iterator(void): _p(nullptr) {};
-            Iterator(pointer point): _p(point) {};
-            Iterator(Iterator const & other): _p(other._p) {};
-            virtual ~Iterator() {};
+		type &operator ++ ()
+		{
+			_ptr++;
+			return *this;
+		};
+		
+		type operator ++ (int) 
+		{
+			type tmp = *this;
+			++(*this);
+			return tmp;
+		};
+		
+		type &operator -- () 
+		{
+			_ptr--;
+			return *this;
+		};
+		
+		type operator -- (int) 
+		{
+			type tmp = *this;
+			--(*this);
+			return tmp;
+		};
+		
+		type operator += (int n) 
+		{
+			_ptr += n;
+			return *this;
+		};
+		
+		type operator -= (int n) 
+		{
+			_ptr -= n;
+			return *this;
+		};
+		
+		type operator + (int n) const 
+		{
+			type tmp(*this);
+			return tmp += n;
+		};
+		
+		type operator - (int n) const 
+		{
+			type tmp(*this);
+			return tmp -= n;
+		};
+		
+		difference_type operator- (iterator<T, true> it) const 
+		{
+			return _ptr - it._ptr;
+		};
+		
+		reference operator[] (size_t n) const 
+		{
+			return _ptr[n];
+		};
 
-            Iterator& operator++ ()
-            {
-                ++this->_p;
-                return (*this);
-            };
+		bool operator < (const iterator<T, true> &rhs) const	 
+		{
+			return _ptr < rhs._ptr;
+		};
+		bool operator > (const iterator<T, true> &rhs) const
+		{
+			return _ptr > rhs._ptr;
+		};
+		bool operator <= (const iterator<T, true> &rhs) const
+		{
+			return _ptr <= rhs._ptr;
+		};
+		bool operator >= (const iterator<T, true> &rhs) const	
+		{
+			return _ptr >= rhs._ptr;
+		};
+		bool operator == (const iterator<T, true> &rhs) const 
+		{
+			return _ptr == rhs._ptr;
+		};
+		bool operator != (const iterator<T, true> &rhs) const	
+		{
+			return _ptr != rhs._ptr;
+		};
+		reference operator *	() const
+		{
+			return *_ptr;
+		};
+		pointer operator -> () const
+		{
+			return _ptr;
+		};
 
-            Iterator operator++ (int)
-            {
-                Iterator   tmp(*this);
+		friend type operator + (int n, type it) 
+		{
+			return it += n;
+		};
+		friend type operator - (int n, type it) 
+		{
+			return it -= n;
+		};
 
-                ++this->_p;
-                return (tmp);
-            };
-
-            Iterator& operator-- ()
-            {
-                --this->_p;
-                return (*this);
-            };
-
-            Iterator operator-- (int)
-            {
-                Iterator   tmp(*this);
-
-                --this->_p;
-                return (tmp);
-            };
-
-            reference operator* ()
-            {
-                return (*this->_p);
-            };
-
-            const_reference operator* () const
-            {
-                return (*this->_p);
-            };
-
-            pointer operator-> ()
-            {
-                return (*&this->_p);
-            };
-
-            const_pointer operator-> () const
-            {
-                return (*&this->_p);
-            };
-
-            reference operator[](int val)
-            {
-                return (*(this->_p + val));
-            }
-
-            const_reference operator[](int val) const
-            {
-                return (*(this->_p + val));
-            }
-
-            Iterator& operator= (const Iterator & other)
-            {
-                this->_p = other._p;
-                return (*this);
-            };
-
-            
-            Iterator   operator+ (int val)
-            {
-                Iterator   tmp(*this);
-
-                tmp._p = tmp._p + val;
-                return (tmp);
-            };
-
-            Iterator   operator- (int val)
-            {
-                Iterator   tmp(*this);
-
-                tmp._p = tmp._p - val;
-                return (tmp);
-            };
-
-            Iterator&   operator+= (int val)
-            {
-                this->_p = this->_p + val;
-                return (*this);
-            };
-
-            Iterator&   operator-= (int val)
-            {
-                this->_p = this->_p - val;
-                return (*this);
-            };
-
-            bool operator== (const Iterator & other) const
-            {
-                return (this->_p == other._p);
-            };
-
-            bool operator!= (const Iterator & other) const
-            {
-                return (this->_p != other._p);
-            };
-
-            bool operator>= (const Iterator & other) const
-            {
-                return (this->_p >= other._p);
-            };
-
-            bool operator<= (const Iterator & other) const
-            {
-                return (this->_p <= other._p);
-            };
-
-            bool operator< (const Iterator & other) const
-            {
-                return (this->_p < other._p);
-            };
-
-            bool operator> (const Iterator & other) const
-            {
-                return (this->_p > other._p);
-            };
-
-    };
-
+		pointer _ptr;
+	};
 }
 
 #endif
