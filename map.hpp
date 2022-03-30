@@ -51,12 +51,12 @@ namespace ft
 			this->_compare = comp;
 			this->_size = 0;
 
-			this->_container = alloc_node_.allocate(1);
-			this->_container->left_ = this->_container;
-			this->_container->right_ = this->_container;
-			this->_container->parent_ = NULL;
+			this->_container = alloc_node.allocate(1);
+			this->_container->left = this->_container;
+			this->_container->right = this->_container;
+			this->_container->parent = NULL;
 
-			this->_alloc.construct(&this->_container->pair_, value_type());
+			this->_alloc.construct(&this->_container->pair, value_type());
 		}
 
 		template <class InputIterator>
@@ -66,26 +66,26 @@ namespace ft
 			this->_compare = comp;
 			this->_size = 0;
 
-			this->_container = alloc_node_.allocate(1);
-			this->_container->left_ = this->_container;
-			this->_container->right_ = this->_container;
-			this->_container->parent_ = NULL;
-			this->_alloc.construct(&this->_container->pair_, value_type());
+			this->_container = alloc_node.allocate(1);
+			this->_container->left = this->_container;
+			this->_container->right = this->_container;
+			this->_container->parent = NULL;
+			this->_alloc.construct(&this->_container->pair, value_type());
 
 			insert(first, last);
 		};
 
 		map(const map& x)
 		{
-			this->_compare = x._comp;
+			this->_compare = x._compare;
 			this->_size = 0;
 			this->_alloc = x._alloc;
 
-			this->_container = alloc_node_.allocate(1);
-			this->_container->left_ = this->_container;
-			this->_container->right_ = this->_container;
-			this->_container->parent_ = NULL;
-			this->_alloc.construct(&this->_container->pair_, value_type());
+			this->_container = alloc_node.allocate(1);
+			this->_container->left = this->_container;
+			this->_container->right = this->_container;
+			this->_container->parent = NULL;
+			this->_alloc.construct(&this->_container->pair, value_type());
 
 			insert(x.begin(), x.end());
 		};
@@ -93,8 +93,8 @@ namespace ft
 		~map() 
 		{
 			clear();
-			this->_alloc.destroy(&this->_container->pair_);
-			alloc_node_.deallocate(this->_container, 1);
+			this->_alloc.destroy(&this->_container->pair);
+			alloc_node.deallocate(this->_container, 1);
 		};
 
 		map& operator= (const map& x) 
@@ -106,11 +106,11 @@ namespace ft
 
 	//	Iterators
 
-		iterator begin() 
+		iterator begin() const
 		{
 			return iterator(get_left());
 		};
-		iterator end() 
+		iterator end() const
 		{
 			return iterator(this->_container);
 		};
@@ -136,7 +136,7 @@ namespace ft
 		};
 		size_type max_size() const	
 		{
-			return alloc_node_.max_size();
+			return alloc_node.max_size();
 		};
 
 	//	Element access
@@ -171,47 +171,48 @@ namespace ft
 
 		void erase(iterator position)
 		{
-			tree *current = position.ptr_;
+			tree *current = position._ptr;
 			tree *tmp = NULL;
 
-			if (current->left_)
+			if (current->left)
 			{
-				tmp = current->left_;
-				while (tmp->right_)
-					tmp = tmp->right_;
-				if (tmp->parent_->right_ == tmp) 
+				tmp = current->left;
+				while (tmp->right)
+					tmp = tmp->right;
+				if (tmp->parent->right == tmp) 
 				{
-					if (tmp->left_) 
+					if (tmp->left) 
 					{
-						tmp->parent_->right_ = tmp->left_;
-						tmp->left_->parent_ = tmp->parent_;
+						tmp->parent->right = tmp->left;
+						tmp->left->parent = tmp->parent;
 					}
 					else
-						tmp->parent_->right_ = NULL;
+						tmp->parent->right = NULL;
 				}
-				tmp->right_ = current->right_;
-				if (current->right_)
-					current->right_->parent_ = tmp;
-				if (current->left_ != tmp)
-					tmp->left_ = current->left_;
-				if (current->left_)
-					current->left_->parent_ = tmp;
-				tmp->parent_ = current->parent_;
+				tmp->right = current->right;
+				if (current->right)
+					current->right->parent = tmp;
+				if (current->left != tmp)
+					tmp->left = current->left;
+				if (current->left)
+					current->left->parent = tmp;
+				tmp->parent = current->parent;
 			}
-			else if (current->right_) {
-				tmp = current->right_;
-				tmp->parent_ = current->parent_;
+			else if (current->right)
+			{
+				tmp = current->right;
+				tmp->parent = current->parent;
 			}
-			if (current->parent_->left_ == current)
-				current->parent_->left_ = tmp;
+			if (current->parent->left == current)
+				current->parent->left = tmp;
 			else
-				current->parent_->right_ = tmp;
+				current->parent->right = tmp;
 			if (current == get_root())
-				this->_container->parent_ = tmp;
-			this->_alloc.destroy(&current->pair_);
-			alloc_node_.deallocate(current, 1);
+				this->_container->parent = tmp;
+			this->_alloc.destroy(&current->pair);
+			alloc_node.deallocate(current, 1);
 			this->_size--;
-			set_left_right();
+			set_leftright();
 		};
 
 		size_type erase(const key_type& k)
@@ -367,8 +368,6 @@ namespace ft
 			return ft::make_pair(iterator(insert_node(this->_container, this->_compare, val)), true);
 		};
 
-
-
 	private:
 		typedef Tree<value_type>	tree;
 
@@ -378,11 +377,11 @@ namespace ft
 
 			if (!root)
 				return NULL;
-			found = key_exists_recurse(root->left_, key);
-			if (!this->_compare(root->pair_.first, key) && !this->_compare(key, root->pair_.first))
+			found = key_exists_recurse(root->left, key);
+			if (!this->_compare(root->pair.first, key) && !this->_compare(key, root->pair.first))
 				found = root;
 			if (!found)
-				found = key_exists_recurse(root->right_, key);
+				found = key_exists_recurse(root->right, key);
 			return found;
 		}
 
@@ -390,93 +389,93 @@ namespace ft
 		{
 			if (!root)
 				return 0;
-			if (!this->_compare(root->pair_.first, key) && !this->_compare(key, root->pair_.first))
+			if (!this->_compare(root->pair.first, key) && !this->_compare(key, root->pair.first))
 				return 1;
-			return key_count_recurse(root->left_, key) + key_count_recurse(root->right_, key);
+			return key_count_recurse(root->left, key) + key_count_recurse(root->right, key);
 		}
 
-		void	set_left_right()
+		void	set_leftright()
 		{
 			tree *tmp = get_root();
 
 			if (!tmp)
 			{
-				this->_container->left_ = this->_container;
-				this->_container->right_ = this->_container;
+				this->_container->left = this->_container;
+				this->_container->right = this->_container;
 				return ;
 			}
-			while (tmp && tmp->left_)
-				tmp = tmp->left_;
-			this->_container->left_ = tmp;
+			while (tmp && tmp->left)
+				tmp = tmp->left;
+			this->_container->left = tmp;
 
 			tmp = get_root();
-			while (tmp && tmp->right_)
-				tmp = tmp->right_;
-			this->_container->right_ = tmp;
+			while (tmp && tmp->right)
+				tmp = tmp->right;
+			this->_container->right = tmp;
 		}
 
 		tree	*insert_node(tree *node, key_compare comp, value_type pair)
 		{
 			if (node == this->_container)
 			{
-				if (!node->parent_)
+				if (!node->parent)
 				{
-					node->parent_ = alloc_node_.allocate(1);
-					node->parent_->left_ = NULL;
-					node->parent_->right_ = NULL;
-					node->parent_->parent_ = node;
-					this->_alloc.construct(&node->parent_->pair_, pair);
+					node->parent = alloc_node.allocate(1);
+					node->parent->left = NULL;
+					node->parent->right = NULL;
+					node->parent->parent = node;
+					this->_alloc.construct(&node->parent->pair, pair);
 
-					set_left_right();
-					return node->parent_;
+					set_leftright();
+					return node->parent;
 				}
 				else
-					node = node->parent_;
+					node = node->parent;
 			}
-			if (comp(pair.first, node->pair_.first))
+			if (comp(pair.first, node->pair.first))
 			{
-				if (!node->left_)
+				if (!node->left)
 				{
-					node->left_ = alloc_node_.allocate(1);
-					node->left_->left_ = NULL;
-					node->left_->right_ = NULL;
-					node->left_->parent_ = node;
-					this->_alloc.construct(&node->left_->pair_, pair);
+					node->left = alloc_node.allocate(1);
+					node->left->left = NULL;
+					node->left->right = NULL;
+					node->left->parent = node;
+					this->_alloc.construct(&node->left->pair, pair);
 
-					set_left_right();
-					return node->left_;
+					set_leftright();
+					return node->left;
 				}
 				else
-					node = insert_node(node->left_, comp, pair);
+					node = insert_node(node->left, comp, pair);
 			}
 			else
 			{
-				if (!node->right_) {
-					node->right_ = alloc_node_.allocate(1);
-					node->right_->left_ = NULL;
-					node->right_->right_ = NULL;
-					node->right_->parent_ = node;
-					this->_alloc.construct(&node->right_->pair_, pair);
+				if (!node->right) {
+					node->right = alloc_node.allocate(1);
+					node->right->left = NULL;
+					node->right->right = NULL;
+					node->right->parent = node;
+					this->_alloc.construct(&node->right->pair, pair);
 
-					set_left_right();
-					return node->right_;
+					set_leftright();
+					return node->right;
 				}
 				else
-					node = insert_node(node->right_, comp, pair);
+					node = insert_node(node->right, comp, pair);
 			}
 			return node;
 		}
 
-		tree *get_root() const { return this->_container->parent_; };
-		tree *get_left() const { return this->_container->left_; };
-		tree *get_right() const { return this->_container->right_; };
+		tree *get_root() const { return this->_container->parent; };
+		tree *get_left() const { return this->_container->left; };
+		tree *get_right() const { return this->_container->right; };
 
-		typename allocator_type::template rebind<tree>::other alloc_node_;
+		typename allocator_type::template rebind<tree>::other alloc_node;
 
-		tree						*_container;
+		tree*			_container;
 		allocator_type	_alloc;
-		key_compare		 _compare;
-		size_type			 _size;
+		key_compare		_compare;
+		size_type		_size;
 	};
 
 	//	Operators
@@ -486,17 +485,17 @@ namespace ft
 	{
 		if (lhs.size() != rhs.size())
 			return false;
-		typename map<Key, T>::const_iterator it1 = lhs.begin();
-		typename map<Key, T>::const_iterator it2 = rhs.begin();
+		typename map<Key, T>::const_iterator iter1 = lhs.begin();
+		typename map<Key, T>::const_iterator iter2 = rhs.begin();
 
-		while (it1 != lhs.end() && it2 != rhs.end())
+		while (iter1 != lhs.end() && iter2 != rhs.end())
 		{
-			if (*it1 != *it2)
+			if (*iter1 != *iter2)
 				return false;
-			it1++;
-			it2++;
+			iter1++;
+			iter2++;
 		}
-		return (it1 == lhs.end()) && (it2 == rhs.end());
+		return (iter1 == lhs.end()) && (iter2 == rhs.end());
 	};
 
 	template <class Key, class T>
@@ -508,19 +507,19 @@ namespace ft
 	template <class Key, class T>
 	bool operator<	(const map<Key, T>& lhs, const map<Key, T>& rhs)
 	{
-		typename map<Key, T>::const_iterator it1 = lhs.begin();
-		typename map<Key, T>::const_iterator it2 = rhs.begin();
+		typename map<Key, T>::const_iterator iter1 = lhs.begin();
+		typename map<Key, T>::const_iterator iter2 = rhs.begin();
 
-		while (it1 != lhs.end() && it2 != rhs.end())
+		while (iter1 != lhs.end() && iter2 != rhs.end())
 		{
-			if (*it1 < *it2)
+			if (*iter1 < *iter2)
 				return true;
-			if (*it2 < *it1)
+			if (*iter2 < *iter1)
 				return false;
-			it1++;
-			it2++;
+			iter1++;
+			iter2++;
 		}
-		return (it1 == lhs.end()) && (it2 != rhs.end());
+		return (iter1 == lhs.end()) && (iter2 != rhs.end());
 	};
 
 	template <class Key, class T>

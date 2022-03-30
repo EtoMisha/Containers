@@ -15,7 +15,7 @@ OBJS = $(SRCS:.cpp=.o)
 
 OBJS_TEST = $(SRCS_TEST:.cpp=.o) 
 
-NAME = containers
+NAME = main
 
 $(NAME): $(OBJS)
 	$(CC) $(OBJS) -o $(NAME)

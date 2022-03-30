@@ -55,9 +55,22 @@ void print_stack_int(std::stack<int> std_stack, ft::stack<int> ft_stack)
 	std::cout << std::endl;
 }
 
-void print_map(std::map<char, string>std_map, ft::map<char, string>ft_map)
+void print_map(std::map<char, std::string>std_map, ft::map<char, std::string>ft_map)
 {
-	
+	std::map<char,std::string>::iterator iter;
+	ft::map<char,std::string>::iterator ft_iter;
+
+	for (iter = std_map.begin(); iter != std_map.end(); iter++)
+	{
+		std::cout << "    " << iter->first << " - " << iter->second << std::endl;
+	}
+	std::cout << std::endl;
+	for (ft_iter = ft_map.begin(); ft_iter != ft_map.end(); ft_iter++)
+	{
+		std::cout << "    " << ft_iter->first << " - " << ft_iter->second << '\n';
+	}
+
+	std::cout << std::endl;
 }
 
 int main()
@@ -279,14 +292,46 @@ int main()
 	std_map['a'] = "alpha";
 	std_map['b'] = "beta";
 	std_map['c'] = "charly";
-	std_map['d'] = "delta";
 
 	ft_map['a'] = "alpha";
 	ft_map['b'] = "beta";
 	ft_map['c'] = "charly";
-	ft_map['d'] = "delta";
 
+	print_map(std_map, ft_map);
 
+	std::cout << "begin: " << std_map.begin()->first << " - ";
+	std::cout << std_map.begin()->second << std::endl;
+	std::cout << "begin: " << ft_map.begin()->first << " - ";
+	std::cout << ft_map.begin()->second << std::endl;
+
+	std::cout << "end - 1: " << (--std_map.end())->first << " - ";
+	std::cout << (--std_map.end())->second << std::endl;
+	std::cout << "end - 1: " << (--ft_map.end())->first << " - ";
+	std::cout << (--ft_map.end())->second << std::endl;
+
+		std::cout << "size: " << std_map.size() << std::endl;
+	std::cout << "size: " << ft_map.size() << std::endl;
+
+	std::cout << "empty: " << std_map.empty() << std::endl;
+	std::cout << "empty: " << ft_map.empty() << std::endl;
+
+	std::cout << "map[c]: " << std_map['c'] << std::endl;
+	std::cout << "map[c]: " << ft_map['c'] << std::endl;
+
+	std::cout << std::endl << "insert: " << std::endl;
+	std_map.insert(std::pair<char, std::string>('d', "delta"));
+	ft_map.insert(ft::pair<char, std::string>('d', "delta"));
+	print_map(std_map, ft_map);
+
+	std::cout << "erase begin+1: " << std::endl;
+	std_map.erase(++std_map.begin());
+	ft_map.erase(++ft_map.begin());
+	print_map(std_map, ft_map);
+
+	std::cout << "clear: " << std::endl;
+	std_map.clear();
+	ft_map.clear();
+	print_map(std_map, ft_map);
 
 }
 
