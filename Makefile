@@ -1,6 +1,4 @@
-SRCS = test.cpp
-
-SRCS_TEST = test.cpp
+SRCS = main.cpp
 
 CC = c++
 
@@ -11,28 +9,30 @@ INCLUDES = vector.hpp stack.hpp map.hpp iterator.hpp \
 			map_iterator.hpp enable_if.hpp is_integral.hpp \
 			pair.hpp compare.hpp
 
-OBJS = $(SRCS:.cpp=.o) 
+NAME = test
 
-OBJS_TEST = $(SRCS_TEST:.cpp=.o) 
-
-NAME = main
-
-$(NAME): $(OBJS)
-	$(CC) $(OBJS) -o $(NAME)
+$(NAME): main.o
+	$(CC) main.o -o $(NAME)
 
 %.o : %.cpp $(INCLUDES)
 	$(CC) ${FLAGS} -o $@ -c $<
 
 all : $(NAME)
 
-test: $(OBJS)
-	$(CC) $(OBJS) -o test
+vector: test_vector.o
+	$(CC) test_vector.o -o vector
+
+stack: test_stack.o
+	$(CC) test_stack.o -o stack
+
+map: test_map.o
+	$(CC) test_map.o -o map
 
 clean :
-	rm -rf $(OBJS)
+	rm -rf main.o test_vector.o test_stack.o test_map.o
 
 fclean : clean
-	rm -rf $(NAME)
+	rm -rf $(NAME) vector stack map
 
 re : fclean all
 

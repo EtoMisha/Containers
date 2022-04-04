@@ -256,7 +256,7 @@ namespace ft
 			x._size = size_tmp;
 
 			tmp = this->_container;
-			this->_container = x.container;
+			this->_container = x._container;
 			x._container = tmp;
 		};
 

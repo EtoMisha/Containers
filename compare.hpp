@@ -24,7 +24,7 @@ namespace ft
 
 			bool operator()(const T& x, const T& y) const
 			{
-				return comp_(x.first, y.first);
+				return _comp(x.first, y.first);
 			};
 
 			Compare _comp;
