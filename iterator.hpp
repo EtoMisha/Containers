@@ -6,7 +6,7 @@
 namespace ft 
 {
 	template <class T, bool isconst = false>
-	struct iterator 
+	struct iterator
 	{
 		typedef iterator<T, isconst>								type;
 

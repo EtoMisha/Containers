@@ -1,13 +1,13 @@
-#include "map.hpp"
+#include "Map.hpp"
 #include <map>
 
 #include <string>
 #include <iostream>
 
-void print_map(std::map<char, std::string>std_map, ft::map<char, std::string>ft_map)
+void print_map(std::map<char, std::string>std_map, ft::Map<char, std::string>ft_map)
 {
 	std::map<char,std::string>::iterator iter;
-	ft::map<char,std::string>::iterator ft_iter;
+	ft::Map<char,std::string>::iterator ft_iter;
 
 	for (iter = std_map.begin(); iter != std_map.end(); iter++)
 	{
@@ -27,7 +27,7 @@ int main()
 	std::cout << std::endl << "-------- Map ----------" << std::endl;
 
 	std::map<char, std::string> std_map;
-	ft::map<char, std::string> ft_map;
+	ft::Map<char, std::string> ft_map;
 
 	std_map['a'] = "alpha";
 	std_map['b'] = "bravo";
@@ -62,8 +62,6 @@ int main()
 	std::cout  << std::endl << "- Capacity: " << std::endl;
 	std::cout << "size: " << std_map.size() << std::endl;
 	std::cout << "size: " << ft_map.size() << std::endl;
-	std::cout << "max_size: " << std_map.max_size() << std::endl;
-	std::cout << "max_size: " << ft_map.max_size() << std::endl;
 	std::cout << "empty: " << std_map.empty() << std::endl;
 	std::cout << "empty: " << ft_map.empty() << std::endl;
 
@@ -84,7 +82,7 @@ int main()
 
 	std::cout << "swap: " << std::endl;
 	std::map<char, std::string> std_map2;
-	ft::map<char, std::string> ft_map2;
+	ft::Map<char, std::string> ft_map2;
 	std_map2['f'] = "foxtrot";
 	ft_map2['f'] = "foxtrot";
 	std_map.swap(std_map2);

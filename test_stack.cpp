@@ -1,9 +1,9 @@
-#include "stack.hpp"
+#include "Stack.hpp"
 #include <stack>
 #include <string>
 #include <iostream>
 
-void print_stack_int(std::stack<int> std_stack, ft::stack<int> ft_stack)
+void print_stack_int(std::stack<int> std_stack, ft::Stack<int> ft_stack)
 {
 	std::cout << "    ";
 	while (std_stack.size() > 0)
@@ -26,7 +26,7 @@ int main()
 
 	std::cout << "Constructors: " << std::endl;
 	std::stack<int> std_stack;
-	ft::stack<int> ft_stack;
+	ft::Stack<int> ft_stack;
 	print_stack_int(std_stack, ft_stack);
 
 	std::cout << "push: " << std::endl;
